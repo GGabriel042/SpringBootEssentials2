@@ -54,5 +54,4 @@ public class AnimeService {
         animeRepository.save(anime);
     }
 
-
 }
