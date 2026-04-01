@@ -5,11 +5,12 @@ import academy.devdojo.springboot2.exception.BadRequestExceptionDetails;
 import academy.devdojo.springboot2.exception.ExceptionDetails;
 import academy.devdojo.springboot2.exception.ValidationExceptionDetails;
 import lombok.extern.log4j.Log4j2;
-import org.jspecify.annotations.Nullable;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -39,7 +40,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         List<FieldError> fieldError = exception.getBindingResult().getFieldErrors();
         String fields = fieldError.stream().map(FieldError::getField).collect(Collectors.joining(", "));
@@ -60,7 +61,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected @Nullable ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus statusCode, WebRequest request) {
 
         ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timeStamp(LocalDateTime.now())
