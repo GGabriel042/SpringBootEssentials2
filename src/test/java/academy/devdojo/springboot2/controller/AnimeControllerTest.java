@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,5 +93,18 @@ class AnimeControllerTest {
         Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
 
         Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+
+
+    @Test
+    @DisplayName("FindByName returns and empty list of anime when anime is not found")
+    void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound(){
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                .thenReturn(Collections.emptyList());
+
+
+        List<Anime> animes = animeController.findByName("anime").getBody();
+
+        Assertions.assertThat(animes).isNotNull();
     }
 }
