@@ -37,6 +37,9 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.listAllNonPageable())
                 .thenReturn(List.of(AnimeCreator.createValidAnime()));
+
+        BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+                .thenReturn(AnimeCreator.createValidAnime());
     }
 
 
@@ -61,5 +64,17 @@ class AnimeControllerTest {
         Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
 
         Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+
+
+    @Test
+    @DisplayName("FindById returns anime when successful")
+    void findById_ReturnsListOfAnimesInsidePageObject_WhenSuccessful(){
+        Long expectedId = AnimeCreator.createValidAnime().getId();
+        Anime anime = animeController.findById(1L).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 }
