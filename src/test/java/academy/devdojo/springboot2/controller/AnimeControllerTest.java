@@ -40,6 +40,9 @@ class AnimeControllerTest {
 
         BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
                 .thenReturn(AnimeCreator.createValidAnime());
+
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
+                .thenReturn(List.of(AnimeCreator.createValidAnime()));
     }
 
 
@@ -57,7 +60,7 @@ class AnimeControllerTest {
 
     @Test
     @DisplayName("List returns list of anime when successful")
-    void listAll_ReturnsListOfAnimesInsidePageObject_WhenSuccessful(){
+    void listAll_ReturnsListOfAnimes_WhenSuccessful(){
         String expectedName = AnimeCreator.createValidAnime().getName();
         List<Anime> animes = animeController.listAll().getBody();
 
@@ -69,12 +72,25 @@ class AnimeControllerTest {
 
     @Test
     @DisplayName("FindById returns anime when successful")
-    void findById_ReturnsListOfAnimesInsidePageObject_WhenSuccessful(){
+    void findById_ReturnsAnime_WhenSuccessful(){
         Long expectedId = AnimeCreator.createValidAnime().getId();
         Anime anime = animeController.findById(1L).getBody();
 
         Assertions.assertThat(anime).isNotNull();
 
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+
+
+    @Test
+    @DisplayName("FindByName returns anime when successful")
+    void findByName_ReturnsListOfAnimes_WhenSuccessful(){
+        String expectedName = AnimeCreator.createValidAnime().getName();
+        List<Anime> animes = animeController.findByName("anime").getBody();
+
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
     }
 }
