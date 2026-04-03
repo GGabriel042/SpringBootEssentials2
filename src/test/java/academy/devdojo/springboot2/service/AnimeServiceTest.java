@@ -99,7 +99,6 @@ class AnimeServiceTest {
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(()-> animeService.findByIdOrThrowBadRequestException(1L));
-
     }
 
 
