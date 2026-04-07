@@ -3,6 +3,7 @@ package academy.devdojo.springboot2.integration;
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.repository.AnimeRepository;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
+import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 import academy.devdojo.springboot2.util.AnimeCreator;
 import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import academy.devdojo.springboot2.util.AnimePutRequestBodyCreator;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -153,22 +155,25 @@ class AnimeControllerIT {
         Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
     }
 
-//
-//    @Test
-//    @DisplayName("replace update anime when successful")
-//    void replace_UpdateAnime_WhenSuccessful(){
-//
-//        Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody()))
-//                .doesNotThrowAnyException();
-//
-//
-//        ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
-//
-//        Assertions.assertThat(entity).isNotNull();
-//        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-//
-//    }
-//
+
+    @Test
+    @DisplayName("replace update anime when successful")
+    void replace_UpdateAnime_WhenSuccessful(){
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        savedAnime.setName("New name");
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes",
+                HttpMethod.PUT,
+                new HttpEntity<>(savedAnime),
+                Void.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+    }
+
 //
 //
 //    @Test
