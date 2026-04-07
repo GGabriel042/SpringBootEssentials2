@@ -95,19 +95,28 @@ class AnimeControllerIT {
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 
-//
-//
-//    @Test
-//    @DisplayName("FindByName returns anime when successful")
-//    void findByName_ReturnsListOfAnimes_WhenSuccessful(){
-//        String expectedName = AnimeCreator.createValidAnime().getName();
-//        List<Anime> animes = animeController.findByName("anime").getBody();
-//
-//        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
-//
-//        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
-//    }
-//
+
+
+    @Test
+    @DisplayName("FindByName returns anime when successful")
+    void findByName_ReturnsListOfAnimes_WhenSuccessful(){
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        String expectedName = savedAnime.getName();
+        String url = String.format("/animes/find?name=%s", expectedName);
+
+        List<Anime> animes = testRestTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Anime>>() {}
+        ).getBody();
+
+
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+
 //
 //    @Test
 //    @DisplayName("FindByName returns and empty list of anime when anime is not found")
