@@ -22,7 +22,7 @@ public class Anime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty("name")
+//    @JsonProperty("name")
     @NotEmpty(message = "The anime name cannot be empty")
     private String name;
 }

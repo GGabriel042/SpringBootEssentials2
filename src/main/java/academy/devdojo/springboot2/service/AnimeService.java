@@ -19,6 +19,7 @@ import java.util.List;
 public class AnimeService {
 
     private final AnimeRepository animeRepository;
+    private final AnimeMapper animeMapper;
 
     public Page<Anime> listAll(Pageable pageable){
         return animeRepository.findAll(pageable);
@@ -39,7 +40,7 @@ public class AnimeService {
 
     @Transactional
     public Anime save(AnimePostRequestBody animePostRequestBody) {
-        return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
+        return animeRepository.save(animeMapper.toAnime(animePostRequestBody));
     }
 
     public void delete(long id) {
@@ -48,7 +49,7 @@ public class AnimeService {
 
     public void replace(AnimePutRequestBody animePutRequestBody) {
         Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
-        Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        Anime anime = animeMapper.toAnime(animePutRequestBody);
         anime.setId(savedAnime.getId());
         animeRepository.save(anime);
     }
