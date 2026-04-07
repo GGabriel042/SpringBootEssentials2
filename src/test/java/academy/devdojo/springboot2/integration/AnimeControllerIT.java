@@ -41,14 +41,12 @@ class AnimeControllerIT {
         String expectedName = savedAnime.getName();
 
 
-        ResponseEntity<List<Anime>> response = testRestTemplate.exchange(
+        List<Anime> animes = testRestTemplate.exchange(
                 "/animes/all",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Anime>>() {}
-        );
-
-        List<Anime> animes = response.getBody();
+        ).getBody();
 
         Assertions.assertThat(animes).isNotNull();
         Assertions.assertThat(animes)
@@ -83,17 +81,20 @@ class AnimeControllerIT {
     }
 
 
-//    @Test
-//    @DisplayName("FindById returns anime when successful")
-//    void findById_ReturnsAnime_WhenSuccessful(){
-//        Long expectedId = AnimeCreator.createValidAnime().getId();
-//        Anime anime = animeController.findById(1L).getBody();
-//
-//        Assertions.assertThat(anime).isNotNull();
-//
-//        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
-//    }
-//
+    @Test
+    @DisplayName("FindById returns anime when successful")
+    void findById_ReturnsAnime_WhenSuccessful(){
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        Long expectedId = savedAnime.getId();
+
+        Anime anime = testRestTemplate.getForObject("/animes/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
 //
 //
 //    @Test
