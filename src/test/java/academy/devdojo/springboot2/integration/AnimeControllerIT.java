@@ -174,20 +174,22 @@ class AnimeControllerIT {
 
     }
 
-//
-//
-//    @Test
-//    @DisplayName("delete removes when successful")
-//    void delete_RemovesAnime_WhenSuccessful(){
-//
-//        Assertions.assertThatCode(() -> animeController.delete(1))
-//                .doesNotThrowAnyException();
-//
-//
-//        ResponseEntity<Void> entity = animeController.delete(1);
-//
-//        Assertions.assertThat(entity).isNotNull();
-//        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-//
-//    }
+
+
+    @Test
+    @DisplayName("delete removes when successful")
+    void delete_RemovesAnime_WhenSuccessful(){
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes/{id}",
+                HttpMethod.DELETE,
+                null,
+                Void.class,
+                savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
 }
