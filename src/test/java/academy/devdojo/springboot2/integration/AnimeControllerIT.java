@@ -2,6 +2,7 @@ package academy.devdojo.springboot2.integration;
 
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.repository.AnimeRepository;
+import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.util.AnimeCreator;
 import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import academy.devdojo.springboot2.util.AnimePutRequestBodyCreator;
@@ -137,16 +138,21 @@ class AnimeControllerIT {
 
     }
 
-//
-//    @Test
-//    @DisplayName("save returns anime when successful")
-//    void save_ReturnsAnime_WhenSuccessful(){
-//
-//        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
-//
-//        Assertions.assertThat(anime).isNotNull().isEqualTo(AnimeCreator.createValidAnime());
-//    }
-//
+
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_WhenSuccessful(){
+
+        AnimePostRequestBody animePostRequestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
+
+         ResponseEntity<Anime> animeResponseEntity = testRestTemplate.postForEntity("/animes", animePostRequestBody, Anime.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
+    }
+
 //
 //    @Test
 //    @DisplayName("replace update anime when successful")
