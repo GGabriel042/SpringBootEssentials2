@@ -117,19 +117,26 @@ class AnimeControllerIT {
         Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
     }
 
-//
-//    @Test
-//    @DisplayName("FindByName returns and empty list of anime when anime is not found")
-//    void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound(){
-//        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
-//                .thenReturn(Collections.emptyList());
-//
-//
-//        List<Anime> animes = animeController.findByName("anime").getBody();
-//
-//        Assertions.assertThat(animes).isNotNull();
-//    }
-//
+
+    @Test
+    @DisplayName("FindByName returns and empty list of anime when anime is not found")
+    void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound(){
+
+
+
+
+        List<Anime> animes = testRestTemplate.exchange(
+                "/animes/find?name=Churato",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Anime>>() {}
+        ).getBody();
+
+
+        Assertions.assertThat(animes).isNotNull().isEmpty();
+
+    }
+
 //
 //    @Test
 //    @DisplayName("save returns anime when successful")
